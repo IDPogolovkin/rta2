@@ -1,0 +1,386 @@
+<html><head><base href="https://analytics.gov.kz/analytics">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Analytics Portal - Analytics</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #6c757d;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --accent-color: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .ai-search-box {
+            position: relative;
+        }
+        
+        .ai-search-box input {
+            padding-right: 40px;
+        }
+        
+        .ai-search-box::after {
+            content: "🔍";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+        }
+        
+        #timeSeriesChart, #heatmapChart {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <img src="/images/logo.svg" alt="Government Analytics Portal Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/analytics">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/marketplace">Marketplace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/training">Training</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Advanced Analytics</h1>
+        
+        <div class="row mb-4">
+            <div class="col">
+                <div class="ai-search-box">
+                    <input type="text" class="form-control" placeholder="Ask AI for advanced insights...">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Economic Time Series Analysis</h5>
+                        <div id="timeSeriesChart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Regional Performance Heatmap</h5>
+                        <div id="heatmapChart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Predictive Analysis: GDP Growth Forecast</h5>
+                        <canvas id="gdpForecastChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Data Table: Key Economic Indicators</h5>
+                        <table id="economicIndicatorsTable" class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Indicator</th>
+                                    <th>2020</th>
+                                    <th>2021</th>
+                                    <th>2022</th>
+                                    <th>2023 (Projected)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>GDP Growth Rate (%)</td>
+                                    <td>-2.6</td>
+                                    <td>4.1</td>
+                                    <td>3.2</td>
+                                    <td>4.5</td>
+                                </tr>
+                                <tr>
+                                    <td>Inflation Rate (%)</td>
+                                    <td>6.8</td>
+                                    <td>8.4</td>
+                                    <td>7.5</td>
+                                    <td>6.2</td>
+                                </tr>
+                                <tr>
+                                    <td>Unemployment Rate (%)</td>
+                                    <td>4.9</td>
+                                    <td>4.9</td>
+                                    <td>4.8</td>
+                                    <td>4.7</td>
+                                </tr>
+                                <tr>
+                                    <td>Foreign Direct Investment (Billion $)</td>
+                                    <td>17.1</td>
+                                    <td>23.7</td>
+                                    <td>28.0</td>
+                                    <td>32.5</td>
+                                </tr>
+                                <tr>
+                                    <td>Export Volume (Billion $)</td>
+                                    <td>46.9</td>
+                                    <td>60.3</td>
+                                    <td>84.4</td>
+                                    <td>90.2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net@1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        // Economic Time Series Chart
+        var timeSeriesOptions = {
+            series: [{
+                name: 'GDP Growth',
+                data: [3.8, 4.5, 4.1, -2.6, 4.1, 3.2]
+            }, {
+                name: 'Inflation Rate',
+                data: [5.3, 6.0, 5.4, 6.8, 8.4, 7.5]
+            }, {
+                name: 'Unemployment Rate',
+                data: [4.9, 4.8, 4.8, 4.9, 4.9, 4.8]
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: [3, 3, 3],
+                curve: 'straight',
+                dashArray: [0, 5, 8]
+            },
+            title: {
+                text: 'Economic Indicators (2017-2022)',
+                align: 'left'
+            },
+            legend: {
+                tooltipHoverFormatter: function(val, opts) {
+                    return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '%'
+                }
+            },
+            markers: {
+                size: 0,
+                hover: {
+                    sizeOffset: 6
+                }
+            },
+            xaxis: {
+                categories: ['2017', '2018', '2019', '2020', '2021', '2022'],
+            },
+            tooltip: {
+                y: [
+                    {
+                        title: {
+                            formatter: function (val) {
+                                return val + "%"
+                            }
+                        }
+                    },
+                    {
+                        title: {
+                            formatter: function (val) {
+                                return val + "%"
+                            }
+                        }
+                    },
+                    {
+                        title: {
+                            formatter: function (val) {
+                                return val + "%";
+                            }
+                        }
+                    }
+                ]
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        var timeSeriesChart = new ApexCharts(document.querySelector("#timeSeriesChart"), timeSeriesOptions);
+        timeSeriesChart.render();
+
+        // Regional Performance Heatmap
+        var heatmapOptions = {
+            series: [{
+                name: 'GDP Growth',
+                data: [
+                    {x: 'Almaty', y: 4.5},
+                    {x: 'Nur-Sultan', y: 5.2},
+                    {x: 'Shymkent', y: 3.8},
+                    {x: 'East Kazakhstan', y: 3.2},
+                    {x: 'Karaganda', y: 3.5},
+                    {x: 'Aktobe', y: 3.7},
+                    {x: 'Pavlodar', y: 3.3},
+                    {x: 'Atyrau', y: 4.8},
+                ]
+            }, {
+                name: 'FDI',
+                data: [
+                    {x: 'Almaty', y: 3.2},
+                    {x: 'Nur-Sultan', y: 4.1},
+                    {x: 'Shymkent', y: 2.5},
+                    {x: 'East Kazakhstan', y: 2.8},
+                    {x: 'Karaganda', y: 2.7},
+                    {x: 'Aktobe', y: 3.0},
+                    {x: 'Pavlodar', y: 2.6},
+                    {x: 'Atyrau', y: 5.5},
+                ]
+            }, {
+                name: 'Employment Rate',
+                data: [
+                    {x: 'Almaty', y: 95.5},
+                    {x: 'Nur-Sultan', y: 96.2},
+                    {x: 'Shymkent', y: 94.8},
+                    {x: 'East Kazakhstan', y: 95.1},
+                    {x: 'Karaganda', y: 95.3},
+                    {x: 'Aktobe', y: 95.0},
+                    {x: 'Pavlodar', y: 95.2},
+                    {x: 'Atyrau', y: 95.8},
+                ]
+            }],
+            chart: {
+                height: 350,
+                type: 'heatmap',
+            },
+            dataLabels: {
+                enabled: false
+            },
+            colors: ["#008FFB"],
+            title: {
+                text: 'Regional Economic Performance'
+            },
+            xaxis: {
+                type: 'category',
+            }
+        };
+
+        var heatmapChart = new ApexCharts(document.querySelector("#heatmapChart"), heatmapOptions);
+        heatmapChart.render();
+
+        // GDP Growth Forecast Chart
+        const gdpCtx = document.getElementById('gdpForecastChart').getContext('2d');
+        new Chart(gdpCtx, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Actual GDP Growth',
+                    data: [-2.6, 4.1, 3.2, null, null, null],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }, {
+                    label: 'Forecasted GDP Growth',
+                    data: [null, null, null, 4.5, 4.7, 4.9],
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderDash: [5, 5],
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'GDP Growth Forecast'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'GDP Growth Rate (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Initialize DataTable
+        $(document).ready(function() {
+            $('#economicIndicatorsTable').DataTable({
+                paging: false,
+                searching: false,
+                info: false
+            });
+        });
+    </script>
+</body>
+</html>
